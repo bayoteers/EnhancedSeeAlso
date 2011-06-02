@@ -1,6 +1,6 @@
-[% IF external %]
+[% IF external_bugs %]
   [% external_idx = external_idx + 1%]
-  [% external_fields = external.shift %]
+  [% external_fields = external_bugs.shift %]
 
   [% IF user.settings.skin.value == "Dev" %]
     <div id="bug_summary">
