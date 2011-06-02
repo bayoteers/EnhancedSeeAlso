@@ -52,7 +52,7 @@ sub install_update_db {
 
 sub template_before_process {
     my ($self, $args) = @_;
-    
+
     my $cgi = Bugzilla->cgi;
 
     my $vars = $args->{vars};
@@ -61,26 +61,26 @@ sub template_before_process {
     $args->{bug} = $cgi->param('id');
 
     if ($file eq 'bug/edit.html.tmpl') {
-      _display_external_bug_summary($self, $args);
+        _display_external_bug_summary($self, $args);
     }
 }
 
 sub _display_external_bug_summary($$) {
     my ($self, $args) = @_;
-    
+
     my $cgi = Bugzilla->cgi;
 
     # If a bug is registered in the See Also then show details of that external
     # bug in the See Also area.
-    
-    my $bug_id   = $args->{'bug'};
-    
+
+    my $bug_id = $args->{'bug'};
+
     my $bug = new Bugzilla::Bug($bug_id);
-    
+
     my $format = $args->{'format'};
     my $vars   = $args->{'vars'};
 
-    if (!$cgi->param('ctype') || $cgi->param('ctype') eq 'html'){
+    if (!$cgi->param('ctype') || $cgi->param('ctype') eq 'html') {
         my @external_bugs;
 
         my %whitelisted_regexps;
@@ -119,17 +119,16 @@ sub _display_external_bug_summary($$) {
                 $external_bugzilla_fields{$external_name} = $external_fields;
             }
         }
-        
-        
-        foreach my $url (@{$bug->see_also}) {
+
+        foreach my $url (@{ $bug->see_also }) {
             my $valid_name = 0;
-            
+
             while (my ($external_name, $valid_url) = each(%whitelisted_regexps)) {
                 if ($url =~ m/$valid_url/i) {
                     $valid_name = $external_name;
                 }
             }
-            
+
             if ($valid_name) {
                 my $browser = LWP::UserAgent->new();
                 my %post_fields;
