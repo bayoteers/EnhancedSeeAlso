@@ -1,0 +1,31 @@
+[%#
+  # The contents of this file are subject to the Mozilla Public
+  # License Version 1.1 (the "License"); you may not use this file
+  # except in compliance with the License. You may obtain a copy of
+  # the License at http://www.mozilla.org/MPL/
+  #
+  # Software distributed under the License is distributed on an "AS
+  # IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
+  # implied. See the License for the specific language governing
+  # rights and limitations under the License.
+  #
+  # The Original Code is the Bugzilla Example Plugin.
+  #
+  # The Initial Developer of the Original Code is Canonical Ltd.
+  # Portions created by Canonical Ltd. are Copyright (C) 2008
+  # Canonical Ltd. All Rights Reserved.
+  #
+  # Contributor(s): Bradley Baetz <bbaetz@acm.org>
+  #%]
+[%
+    title = "See Also"
+    desc = "See Also"
+%]
+
+[% param_descs = {
+  external_bug_blacklisted_urls => "Regexp for illegal URLs in See Also -field",
+  external_bug_whitelisted_urls => "Each line should contain the name and regexp for each server to be used for external bug status display. Format is [name]=[regexp].",
+  external_bug_bugzilla_credentials => "Each line should contain the name of the external server defined in whitelisted URLs and username,password (for basic Bugzilla login) or servername,realm,username,password (for http-auth login). Format is [name]=[username],[password] or [name]=[servername:port],[realm],[username],[password].",
+  external_bug_fields => "Each line should contain the name of the external server and pairs of external field to fetch and the name it is mapped to on local bugzilla. Format is [name]=[xml field name]:[combobox field name],[]:[]...[]:[].",
+}
+%]

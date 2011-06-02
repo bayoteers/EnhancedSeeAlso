@@ -1,0 +1,41 @@
+[% IF external %]
+  [% external_idx = external_idx + 1%]
+  [% external_fields = external.shift %]
+
+  [% IF user.settings.skin.value == "Dev" %]
+    <div id="bug_summary">
+  [% ELSE %]
+    <br>
+    <div style="float:left;">
+  [% END %]
+
+  [% IF external_fields.Error %]
+    ([% external_fields.Error %])
+  [% ELSE %]
+    <script type="text/javascript">
+      function toggle_external[% external_idx %]() {
+        $('#external_bug[% external_idx %] tr').each(function (i) {
+          if ($(this).is(":visible"))
+            $(this).hide();
+          else
+            $(this).show();
+          });
+        }
+    </script>
+
+    <table border="0" id="external_bug[% external_idx %]">
+      [% FOREACH external_fields %]
+        <tr><th class="field_label">[% field %]:</th><td>[% value %]</td></tr>
+      [% END %]
+
+      [% IF user.settings.skin.value == "Dev" %]
+        <tr><th class="field_label"><a style="text-decoration:none" onclick="toggle_external[% external_idx %]();">(Collapse)</a></th></tr>
+        <tr style="display:none"><th class="field_label"><a style="text-decoration:none" onclick="toggle_external[% external_idx %]();">(Expand)</a></th></tr>
+      [% END %]
+    </table>
+  [% END %]
+  
+  </div>
+
+  <br clear="both">
+[% END %]
