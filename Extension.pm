@@ -97,7 +97,7 @@ sub _display_external_bug_summary($$) {
 
         foreach (split(/\n/, Bugzilla->params->{'external_bug_bugzilla_credentials'})) {
             my ($external_name, $external_credentials) = split(/=/, $_);
-            if ($whitelisted_regexps{$external_name}) {
+            if ($whitelisted_regexps{$external_name} || keys %whitelisted_regexps == 0) {
                 my ($first, $second, $third, $fourth) = split(/,/, $external_credentials);
                 if (!$third) {
                     $external_bugzilla_login{$external_name}->{'login'}    = $first;
