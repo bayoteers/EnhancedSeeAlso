@@ -10,7 +10,7 @@
 # implied. See the License for the specific language governing
 # rights and limitations under the License.
 #
-# The Original Code is the SeeAlso Bugzilla Extension.
+# The Original Code is the EnhancedSeeAlso Bugzilla Extension.
 #
 # The Initial Developer of the Original Code is Stephen Jayna
 # Portions created by the Initial Developer are Copyright (C) 2011 the
@@ -19,13 +19,13 @@
 # Contributor(s):
 #   ext-stephen.jayna@nokia.com
 
-package Bugzilla::Extension::SeeAlso;
+package Bugzilla::Extension::EnhancedSeeAlso;
 use strict;
 use base qw(Bugzilla::Extension);
 use Data::Dumper;
 
-# This code for this is in ./extensions/SeeAlso/lib/Util.pm
-use Bugzilla::Extension::SeeAlso::Util;
+# This code for this is in ./extensions/EnhancedSeeAlso/lib/Util.pm
+use Bugzilla::Extension::EnhancedSeeAlso::Util;
 
 our $VERSION = '0.01';
 
@@ -33,14 +33,14 @@ sub config {
     my ($self, $args) = @_;
 
     my $config = $args->{config};
-    $config->{SeeAlso} = "Bugzilla::Extension::SeeAlso::ConfigSeeAlso";
+    $config->{EnhancedSeeAlso} = "Bugzilla::Extension::SeeAlso::ConfigSeeAlso";
 }
 
 sub config_add_panels {
     my ($self, $args) = @_;
 
     my $modules = $args->{panel_modules};
-    $modules->{SeeAlso} = "Bugzilla::Extension::SeeAlso::ConfigSeeAlso";
+    $modules->{EnhancedSeeAlso} = "Bugzilla::Extension::SeeAlso::ConfigSeeAlso";
 }
 
 # See the documentation of Bugzilla::Hook ("perldoc Bugzilla::Hook"

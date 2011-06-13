@@ -10,7 +10,7 @@
 # implied. See the License for the specific language governing
 # rights and limitations under the License.
 #
-# The Original Code is the SeeAlso Bugzilla Extension.
+# The Original Code is the EnhancedSeeAlso Bugzilla Extension.
 #
 # The Initial Developer of the Original Code is YOUR NAME
 # Portions created by the Initial Developer are Copyright (C) 2011 the
@@ -19,10 +19,10 @@
 # Contributor(s):
 #   YOUR NAME <YOUR EMAIL ADDRESS>
 
-package Bugzilla::Extension::SeeAlso;
+package Bugzilla::Extension::EnhancedSeeAlso;
 use strict;
 
-use constant NAME => 'SeeAlso';
+use constant NAME => 'EnhancedSeeAlso';
 
 use constant REQUIRED_MODULES => [];
 

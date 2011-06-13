@@ -19,7 +19,7 @@
 # Contributor(s): Max Kanat-Alexander <mkanat@bugzilla.org>
 #                 Bradley Baetz <bbaetz@acm.org>
 
-package Bugzilla::Extension::SeeAlso::ConfigSeeAlso;
+package Bugzilla::Extension::EnhancedSeeAlso::ConfigEnhancedSeeAlso;
 use strict;
 use warnings;
 

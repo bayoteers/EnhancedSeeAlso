@@ -10,7 +10,7 @@
 # implied. See the License for the specific language governing
 # rights and limitations under the License.
 #
-# The Original Code is the SeeAlso Bugzilla Extension.
+# The Original Code is the EnhancedSeeAlso Bugzilla Extension.
 #
 # The Initial Developer of the Original Code is YOUR NAME
 # Portions created by the Initial Developer are Copyright (C) 2011 the
@@ -19,7 +19,7 @@
 # Contributor(s):
 #   YOUR NAME <YOUR EMAIL ADDRESS>
 
-package Bugzilla::Extension::SeeAlso::Util;
+package Bugzilla::Extension::EnhancedSeeAlso::Util;
 use strict;
 use base qw(Exporter);
 our @EXPORT = qw(
@@ -27,7 +27,7 @@ our @EXPORT = qw(
 );
 
 # This file can be loaded by your extension via
-# "use Bugzilla::Extension::SeeAlso::Util". You can put functions
+# "use Bugzilla::Extension::EnhancedSeeAlso::Util". You can put functions
 # used by your extension in here. (Make sure you also list them in
 # @EXPORT.)
 
