@@ -33,14 +33,14 @@ sub config {
     my ($self, $args) = @_;
 
     my $config = $args->{config};
-    $config->{EnhancedSeeAlso} = "Bugzilla::Extension::SeeAlso::ConfigSeeAlso";
+    $config->{EnhancedSeeAlso} = "Bugzilla::Extension::EnhancedSeeAlso::ConfigEnhancedSeeAlso";
 }
 
 sub config_add_panels {
     my ($self, $args) = @_;
 
     my $modules = $args->{panel_modules};
-    $modules->{EnhancedSeeAlso} = "Bugzilla::Extension::SeeAlso::ConfigSeeAlso";
+    $modules->{EnhancedSeeAlso} = "Bugzilla::Extension::EnhancedSeeAlso::ConfigEnhancedSeeAlso";
 }
 
 # See the documentation of Bugzilla::Hook ("perldoc Bugzilla::Hook"
