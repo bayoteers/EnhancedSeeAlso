@@ -32,25 +32,25 @@ sub get_param_list {
 
     my @param_list = (
                       {
-                         name    => 'external_bug_blacklisted_urls',
+                         name    => 'enhancedseealso_external_bug_blacklisted_urls',
                          desc    => 'Regexp for illegal urls in See Also -field.',
                          type    => 't',
                          default => '',
                       },
                       {
-                         name    => 'external_bug_whitelisted_urls',
+                         name    => 'enhancedseealso_external_bug_whitelisted_urls',
                          desc    => 'Names and regexps for the servers to be used in external bug display.',
                          type    => 'l',
                          default => '',
                       },
                       {
-                         name    => 'external_bug_bugzilla_credentials',
+                         name    => 'enhancedseealso_external_bug_bugzilla_credentials',
                          desc    => 'Bugzilla login credentials for each external server used.',
                          type    => 'l',
                          default => '',
                       },
                       {
-                         name    => 'external_bug_fields',
+                         name    => 'enhancedseealso_external_bug_fields',
                          desc    => 'Fields to fetch from the external server and to which names they are mapped.',
                          type    => 'l',
                          default => '',

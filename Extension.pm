@@ -85,7 +85,7 @@ sub _display_external_bug_summary($$) {
 
         my %whitelisted_regexps;
 
-        foreach (split(/\n/, Bugzilla->params->{'external_bug_whitelisted_urls'})) {
+        foreach (split(/\n/, Bugzilla->params->{'enhancedseealso_external_bug_whitelisted_urls'})) {
             my ($external_name, $external_regexp) = split(/=/, $_);
             if (length $external_name > 1) {
                 $whitelisted_regexps{$external_name} = $external_regexp;
@@ -95,7 +95,7 @@ sub _display_external_bug_summary($$) {
         my %external_bugzilla_login;
         my %external_bugzilla_httpauth;
 
-        foreach (split(/\n/, Bugzilla->params->{'external_bug_bugzilla_credentials'})) {
+        foreach (split(/\n/, Bugzilla->params->{'enhancedseealso_external_bug_bugzilla_credentials'})) {
             my ($external_name, $external_credentials) = split(/=/, $_);
             if ($whitelisted_regexps{$external_name} || keys %whitelisted_regexps == 0) {
                 my ($first, $second, $third, $fourth) = split(/,/, $external_credentials);
@@ -113,7 +113,7 @@ sub _display_external_bug_summary($$) {
         }
 
         my %external_bugzilla_fields;
-        foreach (split(/\n/, Bugzilla->params->{'external_bug_fields'})) {
+        foreach (split(/\n/, Bugzilla->params->{'enhanced_external_bug_fields'})) {
             my ($external_name, $external_fields) = split(/=/, $_);
 
             $external_bugzilla_fields{$external_name} = $external_fields;
