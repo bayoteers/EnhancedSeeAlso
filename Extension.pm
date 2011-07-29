@@ -113,7 +113,7 @@ sub _display_external_bug_summary($$) {
         }
 
         my %external_bugzilla_fields;
-        foreach (split(/\n/, Bugzilla->params->{'enhanced_external_bug_fields'})) {
+        foreach (split(/\n/, Bugzilla->params->{'enhancedseealso_external_bug_fields'})) {
             my ($external_name, $external_fields) = split(/=/, $_);
 
             $external_bugzilla_fields{$external_name} = $external_fields;
