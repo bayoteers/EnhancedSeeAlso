@@ -1,0 +1,24 @@
+
+    EnhancedSeeAlso - Bugzilla Extension
+
+EnhancedSeeAlso is a Bugzilla Extension that allows you to pull data from
+other Bugzilla instances and display it based on the SeeAlso field.
+
+    INSTALLATION
+
+Install extension by extracting files from archive. Switch to 'extension' directory below Bugzilla root directory and extract files from archive.
+
+A hook must be added to the bug/field.html.tmpl that calls the
+'enhancedseealso' hook.
+
+[% Hook.process('enhancedseealso') %] at line 192 (correct for version 3.6.2)
+
+    LICENCE
+
+The code/extension is released under the Mozilla Public License Version 1.1
+http://www.mozilla.org/MPL/
+
+The Initial Developer of the Original Code is "Nokia Corporation"
+Portions created by the Initial Developer are Copyright (C) 2011 the
+Initial Developer. All Rights Reserved.
+
