@@ -18,6 +18,7 @@
 #
 # Contributor(s):
 #   ext-stephen.jayna@nokia.com
+#   Allan Savolainen <ext-jari.a.savolainen@nokia.com>
 
 package Bugzilla::Extension::EnhancedSeeAlso;
 use strict;
@@ -26,8 +27,9 @@ use Data::Dumper;
 
 # This code for this is in ./extensions/EnhancedSeeAlso/lib/Util.pm
 use Bugzilla::Extension::EnhancedSeeAlso::Util;
+use LWP::UserAgent;
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 sub config {
     my ($self, $args) = @_;
@@ -121,7 +123,8 @@ sub _display_external_bug_summary($$) {
 
         foreach my $url (@{ $bug->see_also }) {
             my $valid_name;
-
+            my $invalid_url = Bugzilla->params->{'enhancedseealso_external_bug_blacklisted_urls'};
+            
             if (keys %whitelisted_regexps > 0) {
                 while (my ($external_name, $valid_url) = each(%whitelisted_regexps)) {
                     if ($url =~ m/$valid_url/i) {
@@ -133,70 +136,77 @@ sub _display_external_bug_summary($$) {
             if (!$valid_name) {
                 $valid_name = 'default';
             }
-
-            my $browser = LWP::UserAgent->new();
-            my %post_fields;
-
-            $browser->protocols_allowed([ 'http', 'https' ]);
-
-            # Get the proxy defined in Bugzilla, stripping and trailing slash.
-            my $proxy = Bugzilla->params->{'proxy_url'};
-            $proxy =~ s/\/$//gis;
-
-            # Setting this ensure's that Crypt:SSLeay's built-in proxy support is used.
-            $ENV{HTTPS_PROXY} = $proxy;
-
-            # If the URL of the proxy is given, use it, else get this information
-            # from the environment variable.
-            my $proxy_url = Bugzilla->params->{'proxy_url'};
-            if ($proxy_url) {
-                $browser->proxy(['http'], $proxy_url);
-            }
-
-            $browser->cookie_jar({});
-            $browser->timeout(10);
-
-            # Use http-auth login or bugzilla login or no login depending on params
-            if ($external_bugzilla_httpauth{$valid_name}) {
-                $browser->credentials($external_bugzilla_httpauth{$valid_name}->{'server'},
-                                      $external_bugzilla_httpauth{$valid_name}->{'realm'},
-                                      $external_bugzilla_httpauth{$valid_name}->{'login'} => $external_bugzilla_httpauth{$valid_name}->{'password'});
-            }
-            elsif ($external_bugzilla_login{$valid_name}) {
-                $post_fields{'Bugzilla_login'}    = $external_bugzilla_login{$valid_name}->{'login'};
-                $post_fields{'Bugzilla_password'} = $external_bugzilla_login{$valid_name}->{'password'};
-            }
-            $post_fields{'ctype'} = 'xml';
-            my $response = $browser->post($url, \%post_fields);
-
-            if ($response->is_success) {
-                if ($response->content =~ m/\<bug error="NotPermitted"\>/) {
-                    push @external_bugs, { 'Error' => 'login_err' };
-                }
-                else {
-                    my @external_fields = split(',', $external_bugzilla_fields{$valid_name});
-
-                    my @to_template;
-
-                    my $content = $response->content;
-
-                    # Get XML fields from external bugzilla
-                    foreach my $external_field (@external_fields) {
-                        my ($external_field, $local_field) = split(/:/, $external_field);
-                        my ($match) = $content =~ /<$external_field>(.*?)<\/$external_field>/ig;
-
-                        if ($match) {
-                            push @to_template, { 'field' => $local_field, 'value' => $match };
-                        }
-                        else {
-                            push @to_template, { 'field' => $local_field, 'value' => '&nbsp;' };
-                        }
-                    }
-                    push @external_bugs, \@to_template;
-                }
+                
+            if (!$external_bugzilla_fields{$valid_name} || ( $invalid_url && $url =~ m/$invalid_url/i )) {
+                # Current URL is either blacklisted or has no configured fields so skipping it
+                push @external_bugs, {  };
             }
             else {
-                push @external_bugs, { 'Error' => 'http_error' };
+
+                my $browser = LWP::UserAgent->new();
+                my %post_fields;
+
+                $browser->protocols_allowed([ 'http', 'https' ]);
+
+                # Get the proxy defined in Bugzilla, stripping and trailing slash.
+                my $proxy = Bugzilla->params->{'proxy_url'};
+                $proxy =~ s/\/$//gis;
+
+                # Setting this ensure's that Crypt:SSLeay's built-in proxy support is used.
+                $ENV{HTTPS_PROXY} = $proxy;
+
+                # If the URL of the proxy is given, use it, else get this information
+                # from the environment variable.
+                my $proxy_url = Bugzilla->params->{'proxy_url'};
+                if ($proxy_url) {
+                    $browser->proxy([qw( https http )], $proxy_url);
+                }
+
+                $browser->cookie_jar({});
+                $browser->timeout(10);
+
+                # Use http-auth login or bugzilla login or no login depending on params
+                if ($external_bugzilla_httpauth{$valid_name}) {
+                    $browser->credentials($external_bugzilla_httpauth{$valid_name}->{'server'},
+                                          $external_bugzilla_httpauth{$valid_name}->{'realm'},
+                                          $external_bugzilla_httpauth{$valid_name}->{'login'} => $external_bugzilla_httpauth{$valid_name}->{'password'});
+                }
+                elsif ($external_bugzilla_login{$valid_name}) {
+                    $post_fields{'Bugzilla_login'}    = $external_bugzilla_login{$valid_name}->{'login'};
+                    $post_fields{'Bugzilla_password'} = $external_bugzilla_login{$valid_name}->{'password'};
+                }
+                $post_fields{'ctype'} = 'xml';
+                my $response = $browser->post($url, \%post_fields);
+
+                if ($response->is_success) {
+                    if ($response->content =~ m/\<bug error="NotPermitted"\>/) {
+                        push @external_bugs, { 'Error' => 'login_err' };
+                    }
+                    else {
+                        my @external_fields = split(',', $external_bugzilla_fields{$valid_name});
+
+                        my @to_template;
+
+                        my $content = $response->content;
+
+                        # Get XML fields from external bugzilla
+                        foreach my $external_field (@external_fields) {
+                            my ($external_field, $local_field) = split(/:/, $external_field);
+                            my ($match) = $content =~ /<$external_field>(.*?)<\/$external_field>/ig;
+
+                            if ($match) {
+                                push @to_template, { 'field' => $local_field, 'value' => $match };
+                            }
+                            else {
+                                push @to_template, { 'field' => $local_field, 'value' => '&nbsp;' };
+                            }
+                        }
+                        push @external_bugs, \@to_template;
+                    }
+                }
+                else {
+                    push @external_bugs, { 'Error' => 'http_error' };
+                }
             }
         }
         $vars->{'external_bugs'} = \@external_bugs;
