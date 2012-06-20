@@ -208,7 +208,7 @@ sub _display_external_bug_summary($$) {
                     }
                 }
                 else {
-                    push @external_bugs, { 'Error' => 'http_error' };
+                    push @external_bugs, { 'Error' => 'http_error: '.$response->status_line };
                 }
             }
         }
