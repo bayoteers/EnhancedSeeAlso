@@ -123,6 +123,9 @@ sub _display_external_bug_summary($$) {
 
         foreach my $url (@{ $bug->see_also }) {
             my $valid_name;
+            if (ref $url) {
+                $url = $url->name;
+            }
             my $invalid_url = Bugzilla->params->{'enhancedseealso_external_bug_blacklisted_urls'};
             
             if (keys %whitelisted_regexps > 0) {
