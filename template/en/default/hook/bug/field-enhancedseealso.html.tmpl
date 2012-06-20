@@ -1,5 +1,6 @@
 [% IF external_bugs %]
-  [% external_idx = external_idx + 1%]
+  [% DEFAULT external_idx = 0 %]
+  [% external_idx = external_idx + 1 %]
   [% external_fields = external_bugs.shift %]
 
   [% IF user.settings.skin.value == "Dev" %]
